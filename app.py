@@ -1,12 +1,15 @@
 import openai
 
+
 def read_file(file_path):
     with open(file_path, 'r', encoding='utf-8') as file:
         return file.read()
 
+
 def load_api_key(file_path):
     with open(file_path, 'r', encoding='utf-8') as file:
         return file.read().strip()
+
 
 #
 def generate_html_from_article(article_text, prompt, api_key):
@@ -23,8 +26,9 @@ def generate_html_from_article(article_text, prompt, api_key):
 
     return response.choices[0].message.content
 
-#Mozemy skorzystac z tej funkcji, albo recznie stworzyc template.html
-#W przypadku recznego tworzenie musimy zmienic w funkcji main inicjalizacje pliku template.html
+
+# Mozemy skorzystac z tej funkcji, albo recznie stworzyc template.html
+# W przypadku recznego tworzenie musimy zmienic w funkcji main inicjalizacje pliku template.html
 def create_template_file(template_path):
     template_content = """
     <!DOCTYPE html>
@@ -83,14 +87,19 @@ def create_template_file(template_path):
     with open(template_path, 'w', encoding='utf-8') as file:
         file.write(template_content)
 
+
 def create_preview_file(html_content, template_content, preview_path):
     # Wstrzyknięcie wygenerowanej treści do szablonu w miejsce <!-- Wklej wygenerowaną treść artykułu tutaj -->
     preview_content = template_content.replace("<!-- Wklej wygenerowaną treść artykułu tutaj -->", html_content)
     with open(preview_path, 'w', encoding='utf-8') as file:
         file.write(preview_content)
+
+
 def save_html_to_file(html_content, output_path):
     with open(output_path, 'w', encoding='utf-8') as file:
         file.write(html_content)
+
+
 def main():
     input_file = 'tresc_artykulu.txt'
     api_key_file = 'openai_key.txt'
@@ -99,16 +108,16 @@ def main():
     preview_file = 'public_html/podglad.html'
     api_key = load_api_key(api_key_file)
     article = read_file(input_file)
-    print("Api key = ",api_key)
+    print("Api key = ", api_key)
     print("Artykul = ", article)
     api_key = load_api_key(api_key_file)
 
     # Treść promptu dla OpenAI
     prompt = (
         "Przekształć poniższy artykuł na kod HTML, z użyciem odpowiednich tagów HTML. "
-        "Z miejscami na grafiki, które umieścic za pomocą: \" \"<img src=\"image_placeholder.jpg\" alt=\"wygeneruj grafikę pokazującą ...\">\". "
+        "Z miejscami na grafiki, które umieścic za pomocą: \" \"<img src=\"image_placeholder.jpg\" alt=\"wygeneruj grafikę pokazującą ...\">\". Podaj dokładny i precyzyjny prompt do generacji"
         "Dodaj podpisy pod grafikami za pomocą tagu <figcaption>. "
-        "Nie używaj znaczników <html>, <head> ani <body>. Nie zmieniaj treści artykułu. Nie dodawaj dodatkowego tekstu albo znaczników oprócz tagów. ")
+        "Nie używaj znaczników <html>, <head> ani <body>. Nie zmieniaj treści artykułu. Nie dodawaj dodatkowego tekstu również nagłówków albo znaczników oprócz tagów. ")
 
     # Odczyt artykułu
     article_content = read_file(input_file)
@@ -120,15 +129,15 @@ def main():
     save_html_to_file(html_content, output_file)
     print(f"Plik HTML został zapisany jako {output_file}")
 
-
-    #Tworzenie szablonu
+    # Tworzenie szablonu
     create_template_file(template_file)
     print(f"Szablon HTML został zapisany jako {template_file}")
 
-    #Tworzenie podgladu
+    # Tworzenie podgladu
     template_content = read_file(template_file)
     create_preview_file(html_content, template_content, preview_file)
     print(f"Podgląd artykułu został zapisany jako {preview_file}")
+
 
 if __name__ == "__main__":
     main()
