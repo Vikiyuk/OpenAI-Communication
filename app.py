@@ -76,19 +76,6 @@ def create_template_file(template_path):
     </head>
     <body>
         <!-- Wklej wygenerowaną treść artykułu tutaj -->
-    
-        <script>
-            // Funkcja do dynamicznego ładowania obrazków, jeśli są oznaczone jako "image_placeholder.jpg"
-            document.addEventListener("DOMContentLoaded", () => {
-                const images = document.querySelectorAll("img[src='image_placeholder.jpg']");
-                images.forEach((img, index) => {
-                    img.src = `https://via.placeholder.com/800x400?text=Grafika+${index + 1}`;
-                    img.alt = "Przykładowa grafika - zastąp ją odpowiednią grafiką";
-                });
-    
-                console.log("Obrazki zastąpione przykładowymi grafikami.");
-            });
-        </script>
     </body>
     </html>
 
@@ -106,10 +93,10 @@ def save_html_to_file(html_content, output_path):
         file.write(html_content)
 def main():
     input_file = 'tresc_artykulu.txt'
-    output_file = 'artykul.html'
     api_key_file = 'openai_key.txt'
-    template_file = 'szablon.html'
-    preview_file = 'podglad.html'
+    output_file = 'public_html/artykul.html'
+    template_file = 'public_html/szablon.html'
+    preview_file = 'public_html/podglad.html'
     api_key = load_api_key(api_key_file)
     article = read_file(input_file)
     print("Api key = ",api_key)
